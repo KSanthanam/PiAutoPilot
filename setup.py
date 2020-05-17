@@ -1,4 +1,5 @@
-import setuptools
+# -*- coding: utf-8 -*-
+from setuptools import setup, find_packages
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
@@ -6,7 +7,7 @@ with open("README.md", "r") as fh:
 with open("LICENSE", "r") as fh:
     license = fh.read()
 
-setuptools.setup(
+setup(
     name="PiAutoPilot",
     version="0.0.1",
     author="KK Santhanam",
@@ -16,7 +17,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     requires=['wheel'],
     url="https://github.com/ksanthanam/PiAutoPilot",
-    packages=setuptools.find_packages(),
+    packages=find_packages(),
     setup_requires=['setuptools','wheel'],
     download_url='https://github.com/KSanthanam/PiAutoPilot/archive/v_01.tar.gz',
     classifiers=[
