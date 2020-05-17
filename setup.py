@@ -13,13 +13,11 @@ setup(
     author="KK Santhanam",
     author_email="KK.Santhanam@gmail.com",
     description="Autopilot for RaspberryPi connected to F7 Flight Controller",
-    long_description=long_description,
-    long_description_content_type="text/markdown",
     requires=['wheel'],
     url="https://github.com/ksanthanam/PiAutoPilot",
     packages=find_packages(),
     setup_requires=['setuptools','wheel'],
-    download_url='https://github.com/KSanthanam/PiAutoPilot/archive/v_01.tar.gz',
+    download_url='https://files.pythonhosted.org/packages/02/fd/13ad8de2fb53e26d98b45060e179b81f534f22179bac6f52258e95afa81b/PiAutoPilot-0.0.1.tar.gz',  
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
@@ -29,3 +27,6 @@ setup(
     python_requires='>=3.6',
     keywords=['RaspberryPi', 'Autopilot', 'F7', 'Betaflight']
 )
+
+    # long_description=long_description,
+    # long_description_content_type="text/markdown",
