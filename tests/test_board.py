@@ -8,6 +8,6 @@ import time
 
 class TestBoardh():
     def test_dummy(self):
-        watch = Board()
+        board = Board()
         assert 1 == 1
    
