@@ -9,7 +9,7 @@ with open("LICENSE", "r") as fh:
 
 setup(
     name="PiAutoPilot",
-    version="0.0.2",
+    version="0.0.3",
     author="KK Santhanam",
     author_email="KK.Santhanam@gmail.com",
     description="Autopilot for RaspberryPi connected to F7 Flight Controller",
