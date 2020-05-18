@@ -106,8 +106,68 @@ class MultiWii(object):
 
       self.PIDcoef = {'rp':0,'ri':0,'rd':0,'pp':0,'pi':0,'pd':0,'yp':0,'yi':0,'yd':0}
       self.rcChannels = {'roll':0,'pitch':0,'yaw':0,'throttle':0,'elapsed':0,'timestamp':0}
+        ## IMU
+        # Output Ports
+
+        # stm
+
+        # A reference to the stream. This output is merely a copy of the stm input. Providing this output makes it much easier to establish the execution order of Multiwii blocks in the diagram because Simulink generally executes daisy-chained blocks in sequence.
+
+        # acc
+
+        # A 3-vector value containing the raw accelerometer values in the x, y and z axes respectively. The units depend on the device.
+
+        # gyr
+
+        # A 3-vector value containing the raw gyroscope values in the x, y and z axes respectively. The units depend on the device.
+
+        # mag
+
+        # A 3-vector value containing the raw magnetometer values in the x, y and z axes respectively. The units depend on the device.
+
+        # err
+
+        # An int32 value indicating whether the data was read successfully. This value will be positive if data was read successfully. It will be zero if data could not be read immediately. If an error occurs then this value is a negative error code. See Error Codes for the different error codes and their values. Use the Compare to Error block rather than the error code itself to check for specific error codes. To check for errors in general use the Compare to Zero block to check whether the err output is less than zero.
       self.rawIMU = {'ax':0,'ay':0,'az':0,'gx':0,'gy':0,'gz':0,'mx':0,'my':0,'mz':0,'elapsed':0,'timestamp':0}
-      self.motor = {'m1':0,'m2':0,'m3':0,'m4':0,'elapsed':0,'timestamp':0}
+
+        ## GPS
+        # Output Ports
+
+        # stm
+
+        # A reference to the stream. This output is merely a copy of the stm input. Providing this output makes it much easier to establish the execution order of Multiwii blocks in the diagram because Simulink generally executes daisy-chained blocks in sequence.
+
+        # fix
+
+        # A boolean value indicating whether a GPS fix has been obtained.
+
+        # sat
+
+        # A uint8 integer containing the number of satellites upon which the GPS measurements were made.
+
+        # coord
+
+        # A 2-vector containing the latitude and longitude coordinates respectively in radians.
+
+        # alt
+
+        # A scalar representing the altitude in metres.
+
+        # speed
+
+        # A scalar representing the speed in metres per second.
+
+        # course
+
+        # A scalar representing the ground course in radians.
+
+        # err
+
+        # An int32 value indicating whether the data was read successfully. This value will be positive if data was read successfully. It will be zero if data could not be read immediately. If an error occurs then this value is a negative error code. See Error Codes for the different error codes and their values. Use the Compare to Error block rather than the error code itself to check for specific error codes. To check for errors in general use the Compare to Zero block to check whether the err output is less than zero.
+      self.rawGPS = {'fix':False,'sat':0,'coord_lat':0,'coord_lng':0,'alt':0,'speed':0,'course':0,'elapsed':0,'timestamp':0}
+
+      
+      self.motor = {'m1':0,'m2':0,'m3':0,'m4':0,'m5':0,'m6':0,'m7':0,'m8':0,'elapsed':0,'timestamp':0}
       self.attitude = {'angx':0,'angy':0,'heading':0,'elapsed':0,'timestamp':0}
       self.altitude = {'estalt':0,'vario':0,'elapsed':0,'timestamp':0}
       self.message = {'angx':0,'angy':0,'heading':0,'roll':0,'pitch':0,'yaw':0,'throttle':0,'elapsed':0,'timestamp':0}
@@ -279,6 +339,10 @@ class MultiWii(object):
                 self.motor['m2']=float(temp[1])
                 self.motor['m3']=float(temp[2])
                 self.motor['m4']=float(temp[3])
+                self.motor['m5']=float(temp[4])
+                self.motor['m6']=float(temp[5])
+                self.motor['m7']=float(temp[6])
+                self.motor['m8']=float(temp[7])
                 self.motor['elapsed']="%0.3f" % (elapsed,)
                 self.motor['timestamp']="%0.2f" % (time.time(),)
                 return self.motor
@@ -301,6 +365,18 @@ class MultiWii(object):
                     self.PIDcoef['yi']= dataPID=[7]
                     self.PIDcoef['yd']= dataPID=[8]
                 return self.PIDcoef
+            elif cmd == MultiWii.RAW_GPS:
+                print(temp)
+                self.rawGPS['fix']=bool(temp[0])
+                self.rawGPS['sat']=int(temp[1])
+                self.rawGPS['lat']=float(temp[2])
+                self.rawGPS['lng']=float(temp[3])
+                self.rawGPS['alt']=float(temp[4])
+                self.rawGPS['speed']=float(temp[5])
+                self.rawGPS['course']=float(temp[5])
+                self.rawGPS['elapsed']=round(elapsed,3)
+                self.rawGPS['timestamp']="%0.2f" % (time.time(),)
+                return self.rawGPS
             else:
                 return "No return error!"
         except Exception as error:
@@ -349,11 +425,26 @@ class MultiWii(object):
                     self.rawIMU['gz']=float(temp[5])
                     self.rawIMU['elapsed']="%0.3f" % (elapsed,)
                     self.rawIMU['timestamp']="%0.2f" % (time.time(),)
+                elif cmd == MultiWii.RAW_GPS:
+                    print(temp)
+                    self.rawGPS['fix']=bool(temp[0])
+                    self.rawGPS['sat']=int(temp[1])
+                    self.rawGPS['lat']=float(temp[2])
+                    self.rawGPS['lng']=float(temp[3])
+                    self.rawGPS['alt']=float(temp[4])
+                    self.rawGPS['speed']=float(temp[5])
+                    self.rawGPS['course']=float(temp[5])
+                    self.rawGPS['elapsed']=round(elapsed,3)
+                    self.rawGPS['timestamp']="%0.2f" % (time.time(),)
                 elif cmd == MultiWii.MOTOR:
                     self.motor['m1']=float(temp[0])
                     self.motor['m2']=float(temp[1])
                     self.motor['m3']=float(temp[2])
                     self.motor['m4']=float(temp[3])
+                    self.motor['m5']=float(temp[4])
+                    self.motor['m6']=float(temp[5])
+                    self.motor['m7']=float(temp[6])
+                    self.motor['m8']=float(temp[7])
                     self.motor['elapsed']="%0.3f" % (elapsed,)
                     self.motor['timestamp']="%0.2f" % (time.time(),)
             except Exception as error:

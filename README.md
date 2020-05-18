@@ -1,6 +1,8 @@
 # PiAutoPilot
 Autopilot software to autopilot F7 Flight Controllers
 
+### Reference
+[Library](https://docs.quanser.com/quarc/documentation/quarc_communications_multiwii.html)
 
 #### Features
 
