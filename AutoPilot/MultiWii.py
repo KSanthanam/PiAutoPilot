@@ -178,6 +178,7 @@ class MultiWii(object):
 
 
       baud_rate = 115200
+      self.ser = serial.Serial(self._serial_port, baudrate=baud_rate , timeout=None)
       """Time to wait until the board becomes operational"""
       wakeup = 2
       try:
