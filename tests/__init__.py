@@ -1,2 +1,2 @@
 
-from AutoPilot.Board import Board
+from AutoPilot.MultiWii import MultiWii

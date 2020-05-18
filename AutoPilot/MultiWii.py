@@ -99,36 +99,39 @@ class MultiWii(object):
         self.setRCneutral()
 
     """Class initialization"""
-    def __init__(self, serPort):
+    def __init__(self, **kwargs):
+      """Global variables of data"""
+      super(MultiWii, self).__init__()
+      self._serial_port = kwargs.get("serial_port",'/dev/ttyACM0')      
 
-        """Global variables of data"""
-        self.PIDcoef = {'rp':0,'ri':0,'rd':0,'pp':0,'pi':0,'pd':0,'yp':0,'yi':0,'yd':0}
-        self.rcChannels = {'roll':0,'pitch':0,'yaw':0,'throttle':0,'elapsed':0,'timestamp':0}
-        self.rawIMU = {'ax':0,'ay':0,'az':0,'gx':0,'gy':0,'gz':0,'mx':0,'my':0,'mz':0,'elapsed':0,'timestamp':0}
-        self.motor = {'m1':0,'m2':0,'m3':0,'m4':0,'elapsed':0,'timestamp':0}
-        self.attitude = {'angx':0,'angy':0,'heading':0,'elapsed':0,'timestamp':0}
-        self.altitude = {'estalt':0,'vario':0,'elapsed':0,'timestamp':0}
-        self.message = {'angx':0,'angy':0,'heading':0,'roll':0,'pitch':0,'yaw':0,'throttle':0,'elapsed':0,'timestamp':0}
-        self.temp = ()
-        self.temp2 = ()
-        self.elapsed = 0
-        self.PRINT = 1
+      self.PIDcoef = {'rp':0,'ri':0,'rd':0,'pp':0,'pi':0,'pd':0,'yp':0,'yi':0,'yd':0}
+      self.rcChannels = {'roll':0,'pitch':0,'yaw':0,'throttle':0,'elapsed':0,'timestamp':0}
+      self.rawIMU = {'ax':0,'ay':0,'az':0,'gx':0,'gy':0,'gz':0,'mx':0,'my':0,'mz':0,'elapsed':0,'timestamp':0}
+      self.motor = {'m1':0,'m2':0,'m3':0,'m4':0,'elapsed':0,'timestamp':0}
+      self.attitude = {'angx':0,'angy':0,'heading':0,'elapsed':0,'timestamp':0}
+      self.altitude = {'estalt':0,'vario':0,'elapsed':0,'timestamp':0}
+      self.message = {'angx':0,'angy':0,'heading':0,'roll':0,'pitch':0,'yaw':0,'throttle':0,'elapsed':0,'timestamp':0}
+      self.temp = ()
+      self.temp2 = ()
+      self.elapsed = 0
+      self.PRINT = 1
 
-        baud_rate = 115200
-        """Time to wait until the board becomes operational"""
-        wakeup = 2
-        try:
-            self.ser = serial.Serial(serPort, baudrate=baud_rate , timeout=None)
-            if self.PRINT:
-                print("Waking up board on "+serPort+"...")
-            for i in range(1,wakeup):
-                if self.PRINT:
-                    print(wakeup-i)
-                    time.sleep(1)
-                else:
-                    time.sleep(1)
-        except Exception as error:
-            print("\n\nError opening "+serPort+" port.\n"+str(error)+"\n\n")
+
+      baud_rate = 115200
+      """Time to wait until the board becomes operational"""
+      wakeup = 2
+      try:
+          self.ser = serial.Serial(self._serial_port, baudrate=baud_rate , timeout=None)
+          if self.PRINT:
+              print("Waking up board on "+self._serial_port+"...")
+          for i in range(1,wakeup):
+              if self.PRINT:
+                  print(wakeup-i)
+                  time.sleep(1)
+              else:
+                  time.sleep(1)
+      except Exception as error:
+          print("\n\nError opening "+self._serial_port+" port.\n"+str(error)+"\n\n")
             
     """Function for sending a command to the board"""
     def sendCMD(self, data_length, code, data):
