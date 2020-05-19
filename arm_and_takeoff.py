@@ -3,6 +3,7 @@
 import time
 from AutoPilot.MultiWii import MultiWii
 from sys import stdout
+import argparse
 def scan_imu(board):
   try:
     while True:
@@ -17,8 +18,14 @@ def scan_imu(board):
   except Exception as error:
       print ("Error on Main: "+str(error))
 if __name__ == "__main__":
-    #board = MultiWii("/dev/ttyUSB0")
-    serial_port = '/dev/cu.usbmodem3672326532381'
-    board = MultiWii(serial_port=serial_port)
+  parser = argparse.ArgumentParser(description='commands')
+  parser.add_argument('--connect')
+  args = parser.parse_args()
+    # serial_port = '/dev/cu.usbmodem3672326532381'
+  connect_string = args.connect
+  if connect_string != None:
+    board = MultiWii(serial_port=connect_string)
     scan_imu(board)
+  else:
+    print("No connection string supplied")
 
