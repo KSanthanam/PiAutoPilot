@@ -178,7 +178,7 @@ class MultiWii(object):
 
 
       baud_rate = 115200
-      self.ser = serial.Serial(self._serial_port, baudrate=baud_rate , timeout=None)
+      self.ser = None # serial.Serial(self._serial_port, baudrate=baud_rate , timeout=None)
       """Time to wait until the board becomes operational"""
       wakeup = 2
       try:
@@ -291,13 +291,16 @@ class MultiWii(object):
             self.sendCMD(0,cmd,[])
             while True:
                 header = self.ser.read()
-                if header == '$':
+                if header == b'$':
                     header = header+self.ser.read(2)
                     break
+            print("Got the header", header)
             datalength = struct.unpack('<b', self.ser.read())[0]
             struct.unpack('<b', self.ser.read())
             data = self.ser.read(datalength)
-            temp = struct.unpack('<'+'h'*(datalength/2),data)
+            length = int(datalength/2)
+            fmt = '<' + ('h' * (int(length/len('h'))+1))[:length]
+            temp = struct.unpack(fmt,data)
             self.ser.flushInput()
             self.ser.flushOutput()
             elapsed = time.time() - start
